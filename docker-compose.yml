@@ -1,0 +1,6 @@
+
+services:
+  #A temporary placeholder to ensure docker is running 
+  hello-world:
+    image: alpine:latest
+    command: echo "Phase 0 skeleton is up and running"
