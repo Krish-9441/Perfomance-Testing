@@ -11,3 +11,8 @@ services:
     ports:
       - "3002:3000"
   
+  socket-hoarder:
+    build:
+      context: ./socket-hoarder
+    ports:
+      - "3003:3000"
