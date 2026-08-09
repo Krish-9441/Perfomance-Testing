@@ -16,3 +16,9 @@ services:
       context: ./socket-hoarder
     ports:
       - "3003:3000"
+
+  sluggish-io:
+    build:
+      context: ./sluggish-io
+    ports:
+      - "3004:3000"
