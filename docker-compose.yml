@@ -1,6 +1,19 @@
-
 services:
-  #A temporary placeholder to ensure docker is running 
-  hello-world:
-    image: alpine:latest
-    command: echo "Phase 0 skeleton is up and running"
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./harness/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Enables the host.docker.internal routing
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./harness/monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./harness/monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      - prometheus

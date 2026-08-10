@@ -1,0 +1,12 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'dummy-servers'
+  # host.docker.internal provides localhost port to docker
+    static_configs:
+      - targets:
+          - 'host.docker.internal:3001' #cpu hog
+          - 'host.docker.internal:3002' #memory leak
+          - 'host.docker.internal:3003' #socket hoarder
+          - 'host.docker.internal:3004' #sluggish io
