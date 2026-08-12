@@ -1,0 +1,45 @@
+{
+  "title": "Load Test Overview (k6)",
+  "tags": ["k6", "load-test"],
+  "timezone": "browser",
+  "refresh": "5s",
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "schemaVersion": 38,
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Active Virtual Users (VUs)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        { "expr": "k6_vus", "legendFormat": "Active VUs" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Requests per Second (RPS)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        { "expr": "sum(rate(k6_http_reqs_total[$__rate_interval]))", "legendFormat": "Total RPS" }
+      ]
+    },
+   {
+      "type": "timeseries",
+      "title": "P99 Latency (Seconds)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "targets": [
+        { "expr": "k6_http_req_duration_p99", "legendFormat": "p99 Latency" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "HTTP Errors",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "targets": [
+        { "expr": "sum(rate(k6_http_reqs_total{status!=\"200\"}[$__rate_interval])) or vector(0)", "legendFormat": "Errors/sec" }
+      ]
+    }
+  ]
+}
