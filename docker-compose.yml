@@ -1,22 +1,99 @@
 services:
+  # --- OBSERVABILITY STACK ---
   prometheus:
     image: prom/prometheus:latest
-    volumes:
-      - ./harness/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    container_name: performance-testing-prometheus
     ports:
       - "9090:9090"
+    volumes:
+      - ./harness/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     extra_hosts:
-      - "host.docker.internal:host-gateway" # Enables the host.docker.internal routing
+      - "host.docker.internal:host-gateway"
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.enable-remote-write-receiver'
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9090/-/healthy"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
 
   grafana:
     image: grafana/grafana:latest
+    container_name: performance-testing-grafana
     ports:
       - "3000:3000"
     volumes:
       - ./harness/monitoring/grafana/provisioning:/etc/grafana/provisioning
       - ./harness/monitoring/grafana/dashboards:/var/lib/grafana/dashboards
     depends_on:
-      - prometheus
+      prometheus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  # --- TARGET SERVICES (BAD ACTORS) ---
+  cpu-hog:
+    build: ./dummy-servers/cpu-hog
+    container_name: bad-actor-cpu-hog
+    ports:
+      - "3001:3001"
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:3001/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1); });\""]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 3s
+
+  memory-leaker:
+    build: ./dummy-servers/memory-leaker
+    container_name: bad-actor-memory-leaker
+    ports:
+      - "3002:3002"
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:3002/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1); });\""]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 3s
+
+  socket-hoarder:
+    build: ./dummy-servers/socket-hoarder
+    container_name: bad-actor-socket-hoarder
+    ports:
+      - "3003:3003"
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:3003/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1); });\""]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 3s
+
+  sluggish-io:
+    build: ./dummy-servers/sluggish-io
+    container_name: bad-actor-sluggish-io
+    ports:
+      - "3004:3004"
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:3004/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1); });\""]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 3s
