@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Performance Test Report</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 40px; background-color: #f4f4f9; color: #333; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 1000px; margin: auto; }
+        h1 { border-bottom: 2px solid #eaeaea; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 40px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #f8f9fa; font-weight: 600; }
+        .pass { color: #2e7d32; font-weight: bold; }
+        .regression { color: #c62828; font-weight: bold; }
+        .improvement { color: #1565c0; font-weight: bold; }
+        pre { background: #2b2b2b; color: #a9b7c6; padding: 20px; border-radius: 6px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Performance Test Report</h1>
+        <p><strong>Run Timestamp:</strong> {{TIMESTAMP}}</p>
+        
+        <h2>📊 Primary Metrics (vs Baseline)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Current Run</th>
+                    <th>Baseline</th>
+                    <th>Difference</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{PRIMARY_METRICS_ROWS}}
+            </tbody>
+        </table>
+
+        <h2>🔍 Diagnostics & Debugging</h2>
+        <pre>{{DIAGNOSTICS_TEXT}}</pre>
+    </div>
+</body>
+</html>

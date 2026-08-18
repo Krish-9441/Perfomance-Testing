@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Performance Test Report</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 40px; background-color: #f4f4f9; color: #333; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 1000px; margin: auto; }
+        h1 { border-bottom: 2px solid #eaeaea; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 40px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #f8f9fa; font-weight: 600; }
+        .pass { color: #2e7d32; font-weight: bold; }
+        .regression { color: #c62828; font-weight: bold; }
+        .improvement { color: #1565c0; font-weight: bold; }
+        pre { background: #2b2b2b; color: #a9b7c6; padding: 20px; border-radius: 6px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Performance Test Report</h1>
+        <p><strong>Run Timestamp:</strong> 2026-08-18T14:49:27.391Z</p>
+        
+        <h2>📊 Primary Metrics (vs Baseline)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Current Run</th>
+                    <th>Baseline</th>
+                    <th>Difference</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+            <td>P95 Latency</td>
+            <td>227.69ms</td>
+            <td>1240.09ms</td>
+            <td>-81.64%</td>
+            <td class="improvement">IMPROVEMENT</td>
+        </tr><tr>
+            <td>P99 Latency</td>
+            <td>367.06ms</td>
+            <td>1256.42ms</td>
+            <td>-70.79%</td>
+            <td class="improvement">IMPROVEMENT</td>
+        </tr><tr>
+            <td>Error Rate</td>
+            <td>0.00%</td>
+            <td>0.00%</td>
+            <td>0.00%</td>
+            <td class="pass">PASS</td>
+        </tr><tr>
+            <td>Throughput</td>
+            <td>4.42 req/s</td>
+            <td>3.29 req/s</td>
+            <td>+34.60%</td>
+            <td class="improvement">IMPROVEMENT</td>
+        </tr>
+            </tbody>
+        </table>
+
+        <h2>🔍 Diagnostics & Debugging</h2>
+        <pre>Latency (ms)   : Avg: 93.37 | Med: 72.86 | P90: 119.87 | Max: 401.76
+Network (ms)   : Wait: 93.19 | Block: 2.19 | Conn: 0.53 | Send: 0.07 | Recv: 0.11
+Execution      : Max VUs: 5 | Iteration Avg: 1097.42ms
+Data Transfer  : Sent: 6.08 KB | Recv: 13.21 KB</pre>
+    </div>
+</body>
+</html>

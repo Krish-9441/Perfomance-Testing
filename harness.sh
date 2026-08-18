@@ -16,38 +16,28 @@ case "$COMMAND" in
   status)
     docker compose ps
     ;;
- test-cpu)
-    echo "Running CPU Hog load test..."
+  test)
+    echo "Validating YAML Configuration..."
+    node harness/cli/prepare-config.js
+
+    if [ $? -ne 0 ]; then
+      echo "Aborting due to invalid configuration."
+      exit 1
+    fi
+
+    echo "Running Universal k6 Engine..."
     docker run --rm -i \
       -e K6_PROMETHEUS_RW_SERVER_URL=http://host.docker.internal:9090/api/v1/write \
       -v "/$(pwd)/harness/load-generation/scripts://scripts" \
-      grafana/k6 run -o experimental-prometheus-rw //scripts/cpu-hog.js
-    ;;
-  test-mem)
-    echo "Running Memory Leaker load test..."
-    docker run --rm -i \
-      -e K6_PROMETHEUS_RW_SERVER_URL=http://host.docker.internal:9090/api/v1/write \
-      -v "/$(pwd)/harness/load-generation/scripts://scripts" \
-      grafana/k6 run -o experimental-prometheus-rw //scripts/memory-leaker.js
-    ;;
-  test-socket)
-    echo "Running Socket Hoarder load test..."
-    docker run --rm -i \
-      -e K6_PROMETHEUS_RW_SERVER_URL=http://host.docker.internal:9090/api/v1/write \
-      -v "/$(pwd)/harness/load-generation/scripts://scripts" \
-      grafana/k6 run -o experimental-prometheus-rw //scripts/socket-hoarder.js
-    ;;
-  test-io)
-    echo "Running Sluggish I/O load test..."
-    docker run --rm -i \
-      -e K6_PROMETHEUS_RW_SERVER_URL=http://host.docker.internal:9090/api/v1/write \
-      -v "/$(pwd)/harness/load-generation/scripts://scripts" \
-      grafana/k6 run -o experimental-prometheus-rw //scripts/sluggish-io.js
+      -v "/$(pwd)/harness/load-generation/results://results" \
+      -v "/$(pwd)/config://config" \
+      grafana/k6 run -o experimental-prometheus-rw //scripts/main.js
+
+      # ADD THIS LINE:
+    node harness/reporting/generate-report.js
     ;;
   *)
-    echo "Usage: ./harness.sh {up|down|status|test-cpu|test-mem|test-socket|test-io}"
+    echo "Usage: ./harness.sh {up|down|status|test}"
     exit 1
     ;;
 esac
-
-#unused comment
