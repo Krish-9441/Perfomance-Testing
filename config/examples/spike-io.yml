@@ -1,0 +1,12 @@
+target:
+  baseUrl: "http://host.docker.internal:3004" # Pointing at Sluggish I/O
+
+scenarios:
+  - name: "io_spike_test"
+    endpoint: "/slow-query"
+    trafficShape: "spike"
+    options:
+      stages:
+        - { duration: "10s", target: 100 } # Sudden spike to 100 users
+        - { duration: "20s", target: 100 } # Hold the flash sale traffic
+        - { duration: "10s", target: 0 }   # Immediate drop-off

@@ -1,0 +1,14 @@
+target:
+  baseUrl: "http://host.docker.internal:3001" # CPU Hog
+
+scenarios:
+  - name: "strict_latency_test"
+    endpoint: "/fibonacci?n=35" # High N value means it will be very slow
+    trafficShape: "smoke"
+    options:
+      vus: 5
+      duration: "10s"
+
+thresholds:
+  max_p95_latency_ms: 50 # We demand a response in under 50ms!
+  max_error_rate_percent: 0

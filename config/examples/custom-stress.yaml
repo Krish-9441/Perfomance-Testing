@@ -1,0 +1,12 @@
+target:
+  baseUrl: "http://host.docker.internal:3002" # Pointing at the Memory Leaker
+
+scenarios:
+  - name: "dynamic_memory_test"
+    endpoint: "/leak"
+    trafficShape: "stress"
+    options:
+      stages:
+        - { duration: "10s", target: 10 } # Quick 10-second ramp-up to 10 users
+        - { duration: "15s", target: 10 } # Hold for 15 seconds
+        - { duration: "5s", target: 0 }   # Fast 5-second scale down

@@ -1,0 +1,7 @@
+target:
+  baseUrl: "http://host.docker.internal:3001" # Pointing at the CPU Hog for our smoke test
+
+scenarios:
+  - name: "cpu_hog_smoke"
+    endpoint: "/fibonacci?n=30"
+    trafficShape: "smoke"

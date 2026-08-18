@@ -1,0 +1,18 @@
+target:
+  baseUrl: "http://host.docker.internal:3001" # CPU Hog
+
+auth:
+  tokenEnvVar: "MY_API_SECRET" # Tells k6 to look for an environment variable
+
+scenarios:
+  - name: "post_data_smoke"
+    endpoint: "/health" # We'll just hit the health endpoint
+    method: "POST"
+    payload: 
+      username: "svnit_admin"
+      role: "hostel_manager"
+      action: "allocate_room"
+    trafficShape: "smoke"
+    options:
+      vus: 2
+      duration: "10s"
