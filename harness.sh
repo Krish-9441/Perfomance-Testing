@@ -27,17 +27,14 @@ case "$COMMAND" in
 
     echo "Running Universal k6 Engine..."
     docker run --rm -i \
-      -e K6_PROMETHEUS_RW_SERVER_URL=http://host.docker.internal:9090/api/v1/write \
+      --network host \
+      --env-file .env \
+      -e K6_PROMETHEUS_RW_SERVER_URL=http://localhost:9090/api/v1/write \
       -v "/$(pwd)/harness/load-generation/scripts://scripts" \
       -v "/$(pwd)/harness/load-generation/results://results" \
       -v "/$(pwd)/config://config" \
       grafana/k6 run -o experimental-prometheus-rw //scripts/main.js
 
-      # ADD THIS LINE:
     node harness/reporting/generate-report.js
-    ;;
-  *)
-    echo "Usage: ./harness.sh {up|down|status|test}"
-    exit 1
     ;;
 esac

@@ -12,31 +12,38 @@ import { loadConfig } from './lib/config-loader.js';
 import { getAuthHeaders } from './lib/auth-injector.js';
 import { generatePayload } from './lib/payload-generator.js';
 
-const config = loadConfig();
+const config = JSON.parse(JSON.stringify(loadConfig()));
 
 // Dynamically construct k6 options based on the YAML config
 const scenarios = {};
 config.scenarios.forEach((scen, index) => {
     const key = `scenario_${index}`;
+    let scenarioObj;
 
-    // Calculate weighted virtual users if totalVus and weight are provided
+    if (scen.trafficShape === 'smoke' || scen.trafficShape === 'ramp-up') {
+        scenarioObj = getSmokeScenario(scen);
+    } else if (scen.trafficShape === 'spike') {
+        scenarioObj = getSpikeScenario(scen);
+    } else if (scen.trafficShape === 'stress') {
+        scenarioObj = getStressScenario(scen);
+    } else if (scen.trafficShape === 'soak') {
+        scenarioObj = getSoakScenario(scen);
+    }
+
+    // FORCE the calculated weights into the generated k6 scenario stages
     if (config.totalVus && scen.weight) {
         const allocatedVus = Math.round((scen.weight / 100) * config.totalVus);
         
-        if (!scen.options) scen.options = {};
-        scen.options.vus = allocatedVus;
-        scen.options.targetVus = allocatedVus; 
+        if (scenarioObj.stages) {
+            scenarioObj.stages.forEach(stage => {
+                if (stage.target > 0) stage.target = allocatedVus;
+            });
+        } else if (scenarioObj.vus !== undefined) {
+            scenarioObj.vus = allocatedVus;
+        }
     }
 
-    if (scen.trafficShape === 'smoke' || scen.trafficShape === 'ramp-up') {
-        scenarios[key] = getSmokeScenario(scen);
-    } else if (scen.trafficShape === 'spike') {
-        scenarios[key] = getSpikeScenario(scen);
-    } else if (scen.trafficShape === 'stress') {
-        scenarios[key] = getStressScenario(scen);
-    } else if (scen.trafficShape === 'soak') {
-        scenarios[key] = getSoakScenario(scen);
-    }
+    scenarios[key] = scenarioObj;
 });
 
 export const options = { 
