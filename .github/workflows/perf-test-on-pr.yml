@@ -1,0 +1,27 @@
+name: Performance Regression Check
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  load-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Make Script Executable
+        run: chmod +x ./harness.sh
+
+      - name: Run Headless Performance Test
+        run: |
+          echo "Starting headless load test..."
+          ./harness.sh test
+        env:
+          REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
