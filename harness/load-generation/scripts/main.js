@@ -55,13 +55,13 @@ export const options = {
 
 // If the user defined thresholds in the YAML, translate them for k6
 if (config.thresholds) {
-    if (config.thresholds.max_p95_latency_ms) {
+    if (config.thresholds.p95_latency) {
         // e.g., 'p(95)<500'
-        options.thresholds['http_req_duration'] = [`p(95)<${config.thresholds.max_p95_latency_ms}`];
+        options.thresholds['http_req_duration'] = [`p(95)<${config.thresholds.p95_latency}`];
     }
-    if (config.thresholds.max_error_rate_percent) {
+    if (config.thresholds.error_rate) {
         // k6 expects error rate as a decimal (e.g., 1% is 0.01)
-        const rate = config.thresholds.max_error_rate_percent / 100;
+        const rate = config.thresholds.error_rate;
         options.thresholds['http_req_failed'] = [`rate<${rate}`];
     }
 }
@@ -75,7 +75,9 @@ export function runScenario() {
     
     // Use our new lib functions!
     const payload = generatePayload(scenarioConfig);
-    const params = { headers: getAuthHeaders(config) };
+    const authHeaders = getAuthHeaders(config);
+    const defaultHeaders = config.target.defaultHeaders || {};
+    const params = { headers: Object.assign({}, defaultHeaders, authHeaders) };
 
     let res;
     if (method === 'GET') {
