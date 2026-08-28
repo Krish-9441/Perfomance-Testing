@@ -1,20 +1,66 @@
 {
   "target": {
-    "baseUrl": "http://host.docker.internal:3001"
+    "baseUrl": "https://reqres.in",
+    "environment": "external-demo",
+    "defaultHeaders": {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    }
+  },
+  "totalVus": 100,
+  "auth": {
+    "type": "api-key",
+    "header": "x-api-key",
+    "token": {
+      "envVar": "REQRES_API_KEY"
+    }
   },
   "scenarios": [
     {
-      "name": "strict_latency_test",
-      "endpoint": "/fibonacci?n=35",
+      "name": "fetch-users-list",
+      "endpoint": "/api/users?page=2",
+      "method": "GET",
       "trafficShape": "smoke",
-      "options": {
-        "vus": 5,
-        "duration": "10s"
+      "weight": 40
+    },
+    {
+      "name": "create-new-user",
+      "endpoint": "/api/users",
+      "method": "POST",
+      "trafficShape": "smoke",
+      "weight": 30,
+      "payload": {
+        "type": "static",
+        "data": {
+          "name": "test_engineer",
+          "job": "performance_architect"
+        }
       }
+    },
+    {
+      "name": "update-existing-user",
+      "endpoint": "/api/users/2",
+      "method": "PUT",
+      "trafficShape": "smoke",
+      "weight": 20,
+      "payload": {
+        "type": "static",
+        "data": {
+          "name": "test_engineer",
+          "job": "senior_performance_architect"
+        }
+      }
+    },
+    {
+      "name": "delete-user",
+      "endpoint": "/api/users/2",
+      "method": "DELETE",
+      "trafficShape": "smoke",
+      "weight": 10
     }
   ],
   "thresholds": {
-    "max_p95_latency_ms": 50,
-    "max_error_rate_percent": 0
+    "p95_latency": 800,
+    "error_rate": 0.05
   }
 }

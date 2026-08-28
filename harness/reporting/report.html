@@ -18,8 +18,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Performance Test Report</h1>
-        <p><strong>Run Timestamp:</strong> 2026-08-18T14:49:27.391Z</p>
+        <h1>🚀 Performance Test Report</h1>
+        <p><strong>Run Timestamp:</strong> 2026-08-28T17:39:30.390Z</p>
         
         <h2>📊 Primary Metrics (vs Baseline)</h2>
         <table>
@@ -35,37 +35,37 @@
             <tbody>
                 <tr>
             <td>P95 Latency</td>
-            <td>227.69ms</td>
-            <td>1240.09ms</td>
-            <td>-81.64%</td>
+            <td>247.20ms</td>
+            <td>470.07ms</td>
+            <td>-47.41%</td>
             <td class="improvement">IMPROVEMENT</td>
         </tr><tr>
             <td>P99 Latency</td>
-            <td>367.06ms</td>
-            <td>1256.42ms</td>
-            <td>-70.79%</td>
+            <td>342.37ms</td>
+            <td>568.25ms</td>
+            <td>-39.75%</td>
             <td class="improvement">IMPROVEMENT</td>
         </tr><tr>
             <td>Error Rate</td>
-            <td>0.00%</td>
-            <td>0.00%</td>
-            <td>0.00%</td>
-            <td class="pass">PASS</td>
+            <td>57.17%</td>
+            <td>52.50%</td>
+            <td>+8.90%</td>
+            <td class="regression">REGRESSION</td>
         </tr><tr>
             <td>Throughput</td>
-            <td>4.42 req/s</td>
-            <td>3.29 req/s</td>
-            <td>+34.60%</td>
+            <td>82.53 req/s</td>
+            <td>79.94 req/s</td>
+            <td>+3.23%</td>
             <td class="improvement">IMPROVEMENT</td>
         </tr>
             </tbody>
         </table>
 
         <h2>🔍 Diagnostics & Debugging</h2>
-        <pre>Latency (ms)   : Avg: 93.37 | Med: 72.86 | P90: 119.87 | Max: 401.76
-Network (ms)   : Wait: 93.19 | Block: 2.19 | Conn: 0.53 | Send: 0.07 | Recv: 0.11
-Execution      : Max VUs: 5 | Iteration Avg: 1097.42ms
-Data Transfer  : Sent: 6.08 KB | Recv: 13.21 KB</pre>
+        <pre>Latency (ms)   : Avg: 144.62 | Med: 189.83 | P90: 221.11 | Max: 871.26
+Network (ms)   : Wait: 142.81 | Block: 27.21 | Conn: 7.65 | Send: 0.26 | Recv: 1.55
+Execution      : Max VUs: 100 | Iteration Avg: 1172.88ms
+Data Transfer  : Sent: 259.58 KB | Recv: 1976.28 KB</pre>
     </div>
 </body>
 </html>
