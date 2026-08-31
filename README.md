@@ -142,7 +142,7 @@ Appends data to a module-level array on every call, which V8's garbage collector
 
 <p align="center">
   <!-- 🖼️ SCREENSHOT PLACEHOLDER -->
-  <img src="docs/images/memory-leaker.jpg" alt="Memory Leaker heap growth" width="700">
+  <img src="docs/images/memory-leak.jpg" alt="Memory Leaker heap growth" width="700">
 </p>
 
 ### 🔌 Socket Hoarder
